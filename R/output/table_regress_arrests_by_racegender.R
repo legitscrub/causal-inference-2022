@@ -1,8 +1,8 @@
 # Builds a LaTeX table of regression output using the stargazer package.
 
 model <- 
-  read_csv(here("data/NLSY97_clean.csv")) %>%
-  lm(total_arrests ~ race + gender, data = .)
+  read_csv(here("/Users/jonathanbowman/Desktop/Repos/Causal/causal-inference-2022/data/NLSY97_clean.csv")) %>%
+  glm(incar_status ~ race + gender, data = ., family = "binomial")
 
 # Here we supply our own standard errors b/c we want to 
 # use heteroskedasticity-robust errors.
@@ -17,8 +17,8 @@ stargazer(
   model,
   se = list(se),
   covariate.labels = covariate.labels,
-  dep.var.labels = "Arrests in 2002",
-  out = here("tables/regress_arrests_by_racegender.tex"),
+  dep.var.labels = "Incarceration status in 2002",
+  out = here("tables/regress_incarcerated_by_racegender.tex"),
   title = "Regression Output. Omitted category is Black Females.",
   label = "tab:regression"
 )

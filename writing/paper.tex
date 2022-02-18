@@ -31,52 +31,48 @@
 }
 
 % set the author, title, and date of the document. \maketitle adds it to the document.
-\author{Nathan Hattersley}
+\author{John Bowman}
 \title{My Paper on NLSY97 Data}
 \date{Sping 2022}
 
 \begin{document}
 \maketitle
 
-\section{The First Section}
+\section{Outline}
 
-This is where I talk about basic \LaTeX. Using the \texttt{parskip} package, I can create a new paragraph by using line breaks, which I will do now.
+In this brief study, I tabulated the incarceration status of individuals who responded to the National Longitudinal Survey of Youth in 2002. Using this information, I made a model to predict incarceration status based on racial and gender identity.
 
-I can also make cool equations inline by using parentheses{\textemdash}like this: \(x + 2\){\textemdash}or by using single dollar signs{\textemdash}like this: $x+2$. Parentheses are preferred because the left and right delimiter are distinct.
+The survey collects data on the incarceration status of an individual by month. For the purpose of this study, I generated a  binary indicator variable of whether this individual was incarcerated at any point during the year. The survey also collects racial and gender data. The racial categories are Black, Hispanic, Mixed Race Non Hispanic, and Non Black Non Hispanic.
 
-I can make cool equations in a block style by using the \texttt{equation} environment like so:
-\begin{equation*}
-    y = x\beta + \varepsilon
-\end{equation*}
-or by using double dollar signs:
+
 $$
-    y = x\beta + \varepsilon
+    Incarcerated = race\beta + gender\beta + \varepsilon
 $$
 
-Again, the \texttt{equation} environment is preferred because the begin and end delimiters are different.
-
-I can also add a bibliography, but this is beyond the scope of our discussion right now. Overleaf has plenty of resources for this on their \href{https://www.overleaf.com/learn}{website}. Another good place to look for LaTeX help is the \href{https://en.wikibooks.org/wiki/LaTeX}{WikiBook} on it.
+The model above predicts the probability of incarceration, based on race and gender. Because each variable is an indicator variable only one race and gender status is assigned to a given observation and is associated with a multiplicative change in probability.
 
 \newpage
 
-\section{The Second Section}
+\section{Analysis}
 
-Wherein we do tables and graphs. To include the graph we made in ggplot, we create the \texttt{figure} environment. The `H' option tells LaTeX to `hold' the position of the figure instead of positioning it somewhere else. I use the \texttt{caption} command to add a caption{\textemdash}although I also put a title on the plot in ggplot so you would typically choose one or the other. I use the \texttt{label} command after the caption to add a label. Then in my paper I can use the \texttt{ref} command and LaTeX knows I am referring to Figure \ref{fig:graph}.
+The \texttt{figure} below visualizes the count of individuals who are incarcerated split up by the aforementioned gender and racial groups. It should be noted that the survey includes responses from 8,621 individuals, but there are only a total of 178 displayed in the graph and counted in the subsequent table. Additionally, there are no observations of incarceration for Mixed Race Non Hispanic Males. This will likely cause distortions in the regression since the sample of individuals who are actually incarcerated is simply not large enough for an accurate probability estimate of incarceration. 
 
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=.85\textwidth]{arrests_by_racegender}
+        \includegraphics[width=.85\textwidth]{../figures/incarcerated_by_racegender.png}
     \end{center}
-    \caption{Mean Number of Arrests in 2002 by Race and Gender (this is the LaTeX caption, not the ggplot title)}
+    \caption{Mean Number of Months Incarcerated in 2002 by Race and Gender (this is the LaTeX caption, not the ggplot title)}
     \label{fig:graph}
 \end{figure}
 
 
-Tables are somewhat easier, since \texttt{kableExtra} and \texttt{stargazer} generate LaTeX code that is ready to just ``copy-paste'' into our document. The \texttt{label} argument in the R code is the label that the table will have in the tex output, if you want to \texttt{ref} it.
+Figure \ref{fig:graph} does demonstrate some expected qualites. Males are vastly over represented in terms of incarceration status. Ethnic minorites are also overrepresented, compared to the per capita population. The causal relationships for these outcomes are not the subject of this study, but they deserve merit as they could indicate systemic inequites in the justice system. The \texttt{table} below represent the above bar plot numerically.
 
-\input{../tables/arrests_by_racegender.tex}
+\input{../tables/incar_by_racegender.tex}
 
-\input{../tables/regress_arrests_by_racegender.tex}
+\input{../tables/regress_incarcerated_by_racegender.tex}
+
+To interpret these results, take e to the power of the beta value, the probability is multiplied by this exponent. These results show negative probability  across the board, with the exception of male. It is likely that the negative probability  are due to a overwhelming number of individuals in the data set who were not incarcerated. It is likely that this data set is not large enough to properly predict these probability.
 
 \end{document}

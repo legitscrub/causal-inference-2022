@@ -3,7 +3,7 @@
 # vignette("colwise")
 # vignette("rowwise")
 
-read_csv(here("data/NLSY97_raw.csv")) %>%
+read_csv(here("/Users/jonathanbowman/Desktop/Repos/Causal/causal-inference-2022/data/NSLY97_raw.csv")) %>%
   
   # refused responses or already incarcerated --> NA
   # starts_with("E") are the columns that hold number of arrests per month of 2002
@@ -18,7 +18,7 @@ read_csv(here("data/NLSY97_raw.csv")) %>%
   
   # sum across the months using rowwise
   rowwise() %>%
-  mutate(total_arrests = sum(c_across(starts_with("E")), na.rm = TRUE)) %>%
+  mutate(total_incar = sum(c_across(starts_with("E")), na.rm = TRUE)) %>%
   ungroup() %>%
 
   # recode the gender variable
@@ -32,8 +32,11 @@ read_csv(here("data/NLSY97_raw.csv")) %>%
     R1482600 == 4 ~ "Non-Black / Non-Hispanic",
   )) %>%
   
+  mutate(incar_status = ifelse(total_incar > 0, 1,0)) %>% 
+  
   # finally, select the variables that will be used in the analysis
-  select(race, gender, total_arrests) %>%
+  select(race, gender, total_incar, incar_status) %>%
   
   # write to a csv
   write_csv(here("data/NLSY97_clean.csv"))
+view(read.csv("data/NLSY97_clean.csv"))
